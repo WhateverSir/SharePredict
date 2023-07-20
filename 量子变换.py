@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import tushare as ts
+import akshare as ts
 
 
 # 函数定义
@@ -89,7 +89,7 @@ def guihua(data):
     #     index -= 1
     return y + getarray(coefficient, len(data)+days)
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
-df = ts.get_k_data("300888")
+df = ts.stock_zh_a_daily("sz002371")
 # 数据准备
 dataset = df.close
 # 将整型变为float
