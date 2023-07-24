@@ -92,16 +92,45 @@ def guihua(data):
 df = ts.stock_zh_a_daily("sz002371")
 # 数据准备
 dataset = df.close
+
 # 将整型变为float
 dataset = dataset.astype('float32')
+
+# 获取最近100天的涨跌幅数据并计算收盘价
 datatemp=np.zeros(100)
 for i in range(100):
     datatemp[i] =(dataset[len(dataset)-100+i]-dataset[len(dataset)-101+i])/dataset[len(dataset)-101+i]
+    
+# 将收盘价按时间顺序排列，用于画蜡烛图
+closes = dataset[-100:]
+closes.reverse()
 
-# 画图 
-plt.figure(1)
-plt.plot(datatemp)
-predicted = guihua(datatemp)
-plt.bar(range(len(predicted)), predicted, width=0.582, color='orange')#plot(predicted)#
-plt.legend(["real","predict"], loc='upper left')
+# 设置画布大小和标题
+fig = plt.figure(figsize=(12,6))
+fig.suptitle('Stock Candlestick Chart', fontsize=14)
+
+# 添加蜡烛图子图
+ax1 = fig.add_subplot(111)
+
+# 设置x轴和y轴标签和范围
+ax1.set_xlabel('Time')
+ax1.set_ylabel('Price')
+ax1.set_xlim(-1,len(closes))
+ax1.set_ylim(min(closes)*0.9, max(closes)*1.1)
+
+# 绘制蜡烛图，红涨绿跌
+for i in range(len(closes)):
+    if closes[i] > closes[i-1]:
+        ax1.bar(i, closes[i]-closes[i-1], bottom=closes[i-1], color='red', width=0.5, align='center')
+        ax1.bar(i, 0.01, bottom=closes[i], color='red', width=0.5, align='center')
+    else:
+        ax1.bar(i, closes[i]-closes[i-1], bottom=closes[i], color='green', width=0.5, align='center')
+        ax1.bar(i, 0.01, bottom=closes[i-1], color='green', width=0.5, align='center')
+
+# 绘制预测结果，用黄色柱形表示
+predicted = guihua(datatemp)[-5:]
+for i in range(len(predicted)):
+    ax1.bar(i+len(closes), predicted[i]-closes[-1], bottom=closes[-1], color='yellow', width=0.5, align='center')
+
+# 显示图像
 plt.show()
