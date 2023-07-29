@@ -90,20 +90,12 @@ def guihua(data):
     return y + getarray(coefficient, len(data)+days)
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
 df = ts.stock_zh_a_daily("sz002371")
+
 # 数据准备
-dataset = df.close
-
-# 将整型变为float
-dataset = dataset.astype('float32')
-
-# 获取最近100天的涨跌幅数据并计算收盘价
-datatemp=np.zeros(100)
-for i in range(100):
-    datatemp[i] =(dataset[len(dataset)-100+i]-dataset[len(dataset)-101+i])/dataset[len(dataset)-101+i]
-    
-# 将收盘价按时间顺序排列，用于画蜡烛图
-closes = dataset[-100:]
-closes.reverse()
+closes = np.array(df.close.astype('float32')[-100:])
+opens = np.array(df.open.astype('float32')[-100:])
+highs = np.array(df.high.astype('float32')[-100:])
+lows = np.array(df.low.astype('float32')[-100:])
 
 # 设置画布大小和标题
 fig = plt.figure(figsize=(12,6))
@@ -115,22 +107,30 @@ ax1 = fig.add_subplot(111)
 # 设置x轴和y轴标签和范围
 ax1.set_xlabel('Time')
 ax1.set_ylabel('Price')
-ax1.set_xlim(-1,len(closes))
-ax1.set_ylim(min(closes)*0.9, max(closes)*1.1)
+ax1.set_xlim(-1,len(closes)+days)
+ax1.set_ylim(min(closes)*0.95, max(closes)*1.05)
 
 # 绘制蜡烛图，红涨绿跌
 for i in range(len(closes)):
-    if closes[i] > closes[i-1]:
-        ax1.bar(i, closes[i]-closes[i-1], bottom=closes[i-1], color='red', width=0.5, align='center')
-        ax1.bar(i, 0.01, bottom=closes[i], color='red', width=0.5, align='center')
+    if closes[i] >= opens[i]:
+        ax1.bar(i, closes[i]-opens[i], bottom=opens[i], color='r', width=0.618, align='center')
+        ax1.bar(i, highs[i]-lows[i], bottom=lows[i], color='r', width=0.1, align='center')
     else:
-        ax1.bar(i, closes[i]-closes[i-1], bottom=closes[i], color='green', width=0.5, align='center')
-        ax1.bar(i, 0.01, bottom=closes[i-1], color='green', width=0.5, align='center')
+        ax1.bar(i, opens[i]-closes[i], bottom=closes[i], color='g', width=0.618, align='center')
+        ax1.bar(i, highs[i]-lows[i], bottom=lows[i], color='g', width=0.1, align='center')
 
-# 绘制预测结果，用黄色柱形表示
-predicted = guihua(datatemp)[-5:]
-for i in range(len(predicted)):
-    ax1.bar(i+len(closes), predicted[i]-closes[-1], bottom=closes[-1], color='yellow', width=0.5, align='center')
+# 绘制预测结果，用褪色柱形表示
+closep = guihua(closes)[-5:]
+openp = guihua(opens)[-5:]
+highp = guihua(highs)[-5:]
+lowp = guihua(lows)[-5:]
+for i in range(len(closep)):
+    if closep[i] >= openp[i]:
+        ax1.bar(i+len(closes), closep[i]-openp[i], bottom=openp[i], color='coral', width=0.618, align='center')
+        ax1.bar(i+len(closes), highp[i]-lowp[i], bottom=lowp[i], color='coral', width=0.1, align='center')
+    else:
+        ax1.bar(i+len(closes), openp[i]-closep[i], bottom=closep[i], color='lime', width=0.618, align='center')
+        ax1.bar(i+len(closes), highp[i]-lowp[i], bottom=lowp[i], color='lime', width=0.1, align='center')
 
 # 显示图像
 plt.show()
