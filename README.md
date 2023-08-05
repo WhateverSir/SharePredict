@@ -5,10 +5,10 @@
 * akshare (tushare收费了恶心)
 * numpy
 ## 每周运行结果：
-![result](weekly.jpeg)
+![result](week.jpeg)
 如图所示，后5天为预测结果。
 ## A股规律：
-![result](weekly.jpeg)
+![result](year.png)
 如图所示，A股去年的涨跌情况有一定规律性。
 
 元旦后：买入水产、酒店和预制菜板块。
