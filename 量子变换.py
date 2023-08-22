@@ -88,8 +88,12 @@ def guihua(data):
     #     data -= sum(f(len(datatemp), i)*datatemp)/len(datatemp)*f(len(data), i)
     #     index -= 1
     return y + getarray(coefficient, len(data)+days)
+stock = "sz002371"
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
-df = ts.stock_zh_a_daily("sz002371")
+df = ts.stock_zh_a_daily(stock)
+# 通过板块名称获取板块数据,这里没有指定开始及结束日期
+#df = ts.stock_board_industry_index_ths(symbol="半导体及元件")
+info = ts.stock_individual_info_em(symbol=stock[2:])
 
 # 数据准备
 closes = np.array(df.close.astype('float32')[-100:])
@@ -99,7 +103,9 @@ lows = np.array(df.low.astype('float32')[-100:])
 
 # 设置画布大小和标题
 fig = plt.figure(figsize=(12,6))
-fig.suptitle('Stock Candlestick Chart', fontsize=14)
+plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['axes.unicode_minus'] = False
+fig.suptitle(info.loc[5,'value'] + '一周预测', fontsize=14)
 
 # 添加蜡烛图子图
 ax1 = fig.add_subplot(111)
