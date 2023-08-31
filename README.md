@@ -2,7 +2,7 @@
 基于传统方法的股票预测，利用傅里叶变换和其他拟合方法即可进行股票预测。
 ## 环境要求：
 * python3.8+
-* akshare (tushare收费了恶心)
+* akshare (tushare👎收费了🤮)
 * numpy
 ## 每周运行结果：
 ![result](week.jpeg)
