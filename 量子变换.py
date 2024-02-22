@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import akshare as as
+import akshare as aks
 
 
 # 函数定义
@@ -90,10 +90,10 @@ def guihua(data):
     return y + getarray(coefficient, len(data)+days)
 stock = "sz002371"
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
-df = as.stock_zh_a_daily(stock)
+df = aks.stock_zh_a_daily(stock)
 # 通过板块名称获取板块数据,这里没有指定开始及结束日期
-#df = as.stock_board_industry_index_ths(symbol="半导体及元件")
-info = as.stock_individual_info_em(symbol=stock[2:])
+#df = aks.stock_board_industry_index_ths(symbol="半导体及元件")
+info = aks.stock_individual_info_em(symbol=stock[2:])
 
 # 数据准备
 closes = np.array(df.close.astype('float32')[-100:])
