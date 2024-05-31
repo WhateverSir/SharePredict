@@ -84,3 +84,4 @@ for i in range(len(closep)):
 
 # 显示图像
 plt.show()
+plt.savefig('week.jpeg')
