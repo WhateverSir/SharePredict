@@ -53,11 +53,11 @@ ax1 = fig.add_subplot(111)
 # 设置x轴和y轴标签和范围
 ax1.set_xlabel('Time')
 ax1.set_ylabel('Price')
-ax1.set_xlim(-1,len(closes)+days)
+ax1.set_xlim(len(closes)-101, len(closes)+days)
 ax1.set_ylim(min(lows)*0.99, max(highs)*1.01)
 
 # 绘制蜡烛图，红涨绿跌
-for i in range(len(closes)):
+for i in range(len(closes)-100, len(closes)):
     if closes[i] >= opens[i]:
         ax1.bar(i, closes[i]-opens[i], bottom=opens[i], color='r', width=0.618, align='center')
         ax1.bar(i, highs[i]-lows[i], bottom=lows[i], color='r', width=0.1, align='center')
