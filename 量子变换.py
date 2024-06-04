@@ -2,7 +2,7 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 import akshare as ts
-
+import argparse
 
 # 函数定义
 def self_period(data, period):
@@ -28,7 +28,13 @@ def sim2self(x):
     for i in range(len(data)+days):
         y[i] = f2[i%2] + f5[i%5] + f11[i%11] + f21[i%21] + f31[i%31] + f61[i%61]
     return y
-stock ="002457"
+# 定义命令行参数  
+parser = argparse.ArgumentParser(description='Predict stock data based on stock code.')  
+parser.add_argument('--stock', type=str, default='601127', help='Stock code to predict.')  
+  
+# 解析命令行参数  
+args = parser.parse_args()
+stock = args.stock
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
 df = ts.stock_zh_a_hist(symbol=stock , period='daily', start_date='20231001')
 # 通过板块名称获取板块数据,这里没有指定开始及结束日期
