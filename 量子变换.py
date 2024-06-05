@@ -37,9 +37,8 @@ args = parser.parse_args()
 stock = args.stock
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
 df = ts.stock_zh_a_hist(symbol=stock , period='daily', start_date='20231001')
-# 通过板块名称获取板块数据,这里没有指定开始及结束日期
-#df = ts.stock_board_industry_index_ths(symbol="半导体及元件")
-info = ts.stock_individual_info_em(symbol=stock)
+# 通过股票代码获取股票信息
+info = aks.stock_individual_info_em(symbol=args.stock)
 
 # 数据准备
 closes = np.array(df['收盘'].astype('float32')) 
