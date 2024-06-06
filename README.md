@@ -5,7 +5,10 @@
 * akshare (tushare👎收费了🤮)
 * numpy
 ## 每周运行结果：
-第31行设置股票代码，然后直接运行即可。
+```bash
+python3 share_predict.py --stock=000001
+```
+通过以上代码可以预测未来5天股票代码为000001的股票走势。
 ![result](week.jpeg)
 如图所示，后5天为预测结果。
 ## A股规律：
