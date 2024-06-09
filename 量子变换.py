@@ -1,7 +1,7 @@
 import math
 import matplotlib.pyplot as plt
 import numpy as np
-import akshare as ts
+import akshare as aks
 import argparse
 # 定义命令行参数  
 parser = argparse.ArgumentParser(description='Predict stock data based on stock code.')  
@@ -37,7 +37,7 @@ def sim2self(x):
 
 stock = args.stock
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
-df = ts.stock_zh_a_hist(symbol=stock , period='daily', start_date='20231001')
+df = aks.stock_zh_a_hist(symbol=stock , period='daily', start_date='20231001')
 # 通过股票代码获取股票信息
 info = aks.stock_individual_info_em(symbol=args.stock)
 
