@@ -6,7 +6,7 @@
 * numpy
 ## 每周运行结果：
 ```bash
-python3 share_predict.py --stock=000001
+python3 share_predict.py --stock=000001 --days=5
 ```
 通过以上代码可以预测未来5天股票代码为000001的股票走势。
 ![result](week.jpeg)
