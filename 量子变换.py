@@ -3,9 +3,9 @@ import numpy as np
 import akshare as aks
 import argparse
 # 定义命令行参数  
-parser = argparse.ArgumentParser(description='Predict stock data based on stock code.')  
+parser = argparse.ArgumentParser(description='Predict stock data based on sim2self.')  
 parser.add_argument('--stock', type=str, default='601127', help='Stock code to predict.')  
-parser.add_argument('--days', type=int, default=5, help='The number of days to predict.')  
+parser.add_argument('--args.days', type=int, default=5, help='The number of args.days to predict.')  
   
 # 解析命令行参数  
 args = parser.parse_args()
@@ -20,7 +20,7 @@ def self_period(data, period):
     for i in range(len(data)):
         data[i] -= f[i%period]
     return f
-days = args.days
+
 def sim2self(x):
     data = x.copy()
     f2 = self_period(data, 2)
@@ -29,14 +29,13 @@ def sim2self(x):
     f21 = self_period(data, 21)
     f31 = self_period(data, 31)
     f61 = self_period(data, 61)
-    y = np.zeros(len(data)+days)
-    for i in range(len(data)+days):
+    y = np.zeros(len(data)+args.days)
+    for i in range(len(data)+args.days):
         y[i] = f2[i%2] + f5[i%5] + f11[i%11] + f21[i%21] + f31[i%31] + f61[i%61]
     return y
 
-stock = args.stock
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
-df = aks.stock_zh_a_hist(symbol=stock , period='daily', start_date='20231001')
+df = aks.stock_zh_a_hist(symbol=args.stock , period='daily', start_date='20231001')
 # 通过股票代码获取股票信息
 info = aks.stock_individual_info_em(symbol=args.stock)
 
@@ -58,7 +57,7 @@ ax1 = fig.add_subplot(111)
 # 设置x轴和y轴标签和范围
 ax1.set_xlabel('Time')
 ax1.set_ylabel('Price')
-ax1.set_xlim(len(closes)-101, len(closes)+days)
+ax1.set_xlim(len(closes)-101, len(closes)+args.days)
 ax1.set_ylim(min(lows)*0.99, max(highs)*1.01)
 
 # 绘制蜡烛图，红涨绿跌
@@ -72,13 +71,13 @@ for i in range(len(closes)-100, len(closes)):
 
 # 绘制预测结果，用褪色柱形表示
 closep = sim2self(closes[1:]/closes[:-1])
-closep[-1-days] = closes[-1]
-for i in range(days):
-    closep[-days+i] *= closep[-days-1+i]
-closep = closep[-days:]
-openp = sim2self(opens[1:]/closes[:-1])[-days:] * closep
-highp = sim2self(highs[1:]/closes[:-1])[-days:] * closep
-lowp = sim2self(lows[1:]/closes[:-1])[-days:] * closep
+closep[-1-args.days] = closes[-1]
+for i in range(args.days):
+    closep[-args.days+i] *= closep[-args.days-1+i]
+closep = closep[-args.days:]
+openp = sim2self(opens[1:]/closes[:-1])[-args.days:] * closep
+highp = sim2self(highs[1:]/closes[:-1])[-args.days:] * closep
+lowp = sim2self(lows[1:]/closes[:-1])[-args.days:] * closep
 for i in range(len(closep)):
     if closep[i] >= openp[i]:
         ax1.bar(i+len(closes), closep[i]-openp[i], bottom=openp[i], color='coral', width=0.618, align='center')
