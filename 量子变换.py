@@ -23,15 +23,15 @@ def self_period(data, period):
 
 def sim2self(x):
     data = x.copy()
-    f2 = self_period(data, 2)
-    f5 = self_period(data, 5)
-    f11 = self_period(data, 11)
-    f21 = self_period(data, 21)
+    f7 = self_period(data, 7)    
+    f15 = self_period(data, 15)
+    f22 = self_period(data, 22)
     f31 = self_period(data, 31)
+    f43 = self_period(data, 43)
     f61 = self_period(data, 61)
     y = np.zeros(len(data)+args.days)
     for i in range(len(data)+args.days):
-        y[i] = f2[i%2] + f5[i%5] + f11[i%11] + f21[i%21] + f31[i%31] + f61[i%61]
+        y[i] = f7[i%7] + f22[i%22] + f15[i%15] + f31[i%31] + f43[i%43] + f61[i%61]
     return y
 
 # 通过股票代码获取股票数据,这里没有指定开始及结束日期
