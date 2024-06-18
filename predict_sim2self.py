@@ -34,7 +34,7 @@ def sim2self(x):
         y[i] = f7[i%7] + f22[i%22] + f15[i%15] + f31[i%31] + f43[i%43] + f61[i%61]
     return y
 
-# 通过股票代码获取股票数据,这里没有指定开始及结束日期
+# 通过股票代码获取股票数据
 df = aks.stock_zh_a_hist(symbol=args.stock , period='daily', start_date='20231001')
 # 通过股票代码获取股票信息
 info = aks.stock_individual_info_em(symbol=args.stock)
@@ -86,6 +86,6 @@ for i in range(len(closep)):
         ax1.bar(i+len(closes), openp[i]-closep[i], bottom=closep[i], color='lime', width=0.618, align='center')
         ax1.bar(i+len(closes), highp[i]-lowp[i], bottom=lowp[i], color='lime', width=0.1, align='center')
 
-# 显示图像
+# 显示图像&保存图像
 plt.show()
 plt.savefig('C:/Users/Wu/Downloads/week.jpeg')
