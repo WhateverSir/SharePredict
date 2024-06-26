@@ -88,3 +88,13 @@ for epoch in range(num_epochs):
         torch.save(model.state_dict(), args.train_model)
     # 可以在这里添加验证步骤和打印损失等  
     print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {epoch_loss}')
+# 加载模型，预测
+model.eval()
+info = aks.stock_individual_info_em(symbol=args.stock) 
+name = info.loc[5,'value']
+df = aks.stock_zh_a_hist(symbol=args.stock, period='daily', start_date='20231101') 
+change = np.array(df['涨跌幅'].astype('float32')) / 10  #标准化
+exchange = np.array(df['成交量'].astype('float32')) / info.loc[7,'value'] #标准化
+test_input = np.stack([change[-args.seq_length:], exchange[-args.seq_length:]], axis=0)
+test_output = model(torch.tensor(test_input).unsqueeze(0)).squeeze()
+print(f'Stock {name}[code:{args.stock}] tomorrow price change: {test_output.detach().numpy()*10}%')
