@@ -9,6 +9,10 @@
 python3 predict_sim2self.py --stock=000001 --days=5
 ```
 通过以上代码可以预测未来5天股票代码为000001的股票走势。
+```bash
+python3 predict_dnn.py --stock=000001
+```
+通过以上代码可以训练模型并通过模型预测未来1天股票代码为000001的股票涨跌幅。
 ![result](week.jpeg)
 如图所示，后5天为预测结果。
 ## A股规律：
