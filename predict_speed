@@ -1,0 +1,46 @@
+import yfinance as yf  
+import pandas as pd  
+import numpy as np  
+import matplotlib.pyplot as plt  
+  
+# 获取股票数据  
+ticker = 'AAPL'  # 替换为你感兴趣的股票代码  
+data = yf.download(ticker, start='2020-01-01', end='2023-01-01')  
+  
+# 计算速度和加速度  
+data['Speed'] = data['Adj Close'].pct_change()  # 速度（变化率）  
+data['Acceleration'] = data['Speed'].pct_change()  # 加速度（变化率的变化率）  
+  
+# 去除NaN值（由于第一天和第二天没有前一天的数据，所以会是NaN）  
+data = data.dropna()  
+  
+# 绘制收盘价、速度和加速度  
+plt.figure(figsize=(14, 7))  
+plt.subplot(3, 1, 1)  
+plt.plot(data['Adj Close'], label='Adj Close')  
+plt.title('Adjusted Close Price')  
+plt.legend()  
+  
+plt.subplot(3, 1, 2)  
+plt.plot(data['Speed'], label='Speed (Change Rate)', color='orange')  
+plt.title('Speed (Change Rate of Adj Close)')  
+plt.legend()  
+  
+plt.subplot(3, 1, 3)  
+plt.plot(data['Acceleration'], label='Acceleration (Change Rate of Speed)', color='green')  
+plt.title('Acceleration (Change Rate of Speed)')  
+plt.legend()  
+  
+plt.tight_layout()  
+plt.show()  
+  
+# 简单的交易信号示例（根据速度和加速度的符号）  
+# 这是一个非常简单的示例，实际应用中需要更复杂的策略  
+buy_signals = (data['Speed'] > 0) & (data['Acceleration'] > 0)  # 速度上升且加速度上升  
+sell_signals = (data['Speed'] < 0) & (data['Acceleration'] < 0)  # 速度下降且加速度下降  
+  
+# 打印信号  
+print("Buy Signals on dates:")  
+print(data[buy_signals].index)  
+print("\nSell Signals on dates:")  
+print(data[sell_signals].index)
